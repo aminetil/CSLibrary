@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSLibrary</title>
+  <meta name="description" content="Découvrez et consultez des milliers de mémoires, examens, cours et TDs universitaires en Algérie.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast">
+    <i class="ti ti-check"></i>
+    <span id="toast-msg">Action réussie</span>
+  </div>
+
+  <!-- NEW CSLIBRARY LAYOUT -->
+  <div class="csl-layout">
+    <!-- SIDEBAR -->
+    <aside class="csl-sidebar">
+      <div class="sidebar-top">
+        <i class="ti ti-menu-2"></i>
+      </div>
+      <div class="sidebar-bottom">
+        <a href="#"><i class="ti ti-brand-facebook"></i></a>
+        <a href="#"><i class="ti ti-brand-instagram"></i></a>
+        <a href="#"><i class="ti ti-brand-twitter"></i></a>
+      </div>
+    </aside>
+
+    <div class="csl-main">
+      <!-- HEADER -->
+      <header class="csl-header">
+        <div class="logo-csl" onclick="goToHome()">
+          CSLibrary
+        </div>
+        <nav class="csl-nav">
+          <a href="#" onclick="showView('home')" class="active">Home</a>
+          <a href="#" onclick="showView('browse')">About Us</a>
+          <a href="#" onclick="showView('browse')">Content</a>
+          <a href="#" onclick="showView('browse')">L1</a>
+          <a href="#" onclick="showView('browse')">L2</a>
+          <a href="#" onclick="showView('browse')">L3</a>
+          <a href="#" onclick="showView('browse')">M1</a>
+          <a href="#" onclick="showView('browse')">M2</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="csl-search">
+          <input type="text" id="hero-search" placeholder="Search..." oninput="liveSearch(this.value)" onkeydown="if(event.key==='Enter') doSearch()">
+          <i class="ti ti-search" onclick="doSearch()"></i>
+        </div>
+        <div id="navbar-actions-container" style="display:none;"></div>
+      </header>
+
+      <!-- MAIN CONTAINER -->
+      <main class="main-layout">
+
+    <!-- =================== HOME VIEW =================== -->
+    <div class="view active" id="view-home">
+      <!-- New CSLibrary Hero Section -->
+      <div class="csl-hero-container">
+        <!-- Left Side (Illustration) -->
+        <div class="csl-hero-left">
+          <div class="csl-illustration-wrapper csl-animated-float">
+            <!-- Background floating elements -->
+            <div class="csl-dialog-box box-1">Hello World!</div>
+            <div class="csl-dialog-box box-2">System online</div>
+            <img src="hero-illustration.jpg" alt="CSLibrary Illustration" class="csl-hero-img">
+          </div>
+        </div>
+
+        <!-- Right Side (Content & Form) -->
+        <div class="csl-hero-right">
+          <h3 class="csl-hero-subtitle slide-in-animation">From Sci-Fi to</h3>
+          <h1 class="csl-hero-title csl-animated-pulse">Reality</h1>
+          <h2 class="csl-hero-tagline slide-in-animation delay-1">The Future of Technology</h2>
+          
+          <p class="csl-hero-desc slide-in-animation delay-2">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis.
+          </p>
+
+          <div class="csl-auth-form fade-in-animation">
+            <p class="csl-auth-title">Register here</p>
+            <div class="csl-form-row">
+              <input type="email" id="csl-home-email" placeholder="Email" class="csl-input">
+            </div>
+            <div class="csl-form-row">
+              <input type="password" id="csl-home-password" placeholder="Password" class="csl-input">
+            </div>
+            <div class="csl-buttons-row">
+              <button class="csl-btn csl-btn-signin" onclick="document.getElementById('login-email-student').value=document.getElementById('csl-home-email').value; document.getElementById('login-password-student').value=document.getElementById('csl-home-password').value; doLogin()">Sign in</button>
+              <button class="csl-btn csl-btn-signup" onclick="showView('register-student')">Sign up</button>
+            </div>
+          </div>
+
+          <p class="csl-hero-footer-text fade-in-animation">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod consectetuer adipiscing dolor sit amet, consectetuer dolor sit amet adipiscing.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== BROWSE VIEW =================== -->
+    <div class="view" id="view-browse">
+      <div class="inner-page">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+          <h1 class="section-title-scribd" style="margin-bottom: 0;">Explorer la bibliothèque</h1>
+          <button class="btn btn-back" onclick="goBack()"><i class="ti ti-arrow-left"></i> Retour</button>
+        </div>
+
+        <div class="scribd-filter-bar" style="margin-bottom: 24px; padding: 0;">
+          <button class="filter-btn active" onclick="filterCat('all', this)">Tous</button>
+          <button class="filter-btn" onclick="filterCat('Examen', this)">Examens</button>
+          <button class="filter-btn" onclick="filterCat('TD', this)">TD</button>
+          <button class="filter-btn" onclick="filterCat('TP', this)">TP</button>
+          <button class="filter-btn" onclick="filterCat('Cours', this)">Cours</button>
+          <button class="filter-btn" onclick="filterCat('Résumé', this)">Résumés</button>
+          <button class="filter-btn" onclick="filterCat('PFE', this)">PFE</button>
+        </div>
+
+        <div class="scribd-grid" id="browse-docs-grid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== UPLOAD VIEW =================== -->
+    <div class="view" id="view-upload">
+      <div class="inner-page" style="max-width: 720px; margin: 0 auto;">
+        <div class="card">
+          <h2 class="card-title">Soumettre un Document</h2>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Partagez vos mémoires, TDs et examens avec la communauté universitaire algérienne.</p>
+
+          <input type="file" id="student-doc-file-input" accept="application/pdf, .pdf" style="display:none;" onchange="handleStudentFileChange(event)">
+          <div class="admin-pdf-dropzone" id="student-dropzone" style="margin-top:0;" onclick="triggerStudentFileInput()" ondragover="handleStudentDragOver(event)" ondragleave="handleStudentDragLeave(event)" ondrop="handleStudentDrop(event)">
+            <div id="student-dropzone-empty" class="dropzone-content">
+              <div class="dropzone-icon"><i class="ti ti-cloud-upload"></i></div>
+              <div class="dropzone-title" id="upload-filename">Cliquez pour sélectionner un fichier PDF depuis votre PC</div>
+              <div class="dropzone-subtitle">Ou glissez-déposez le document directement ici</div>
+              <div class="dropzone-hint"><i class="ti ti-file-text"></i> Fichier PDF jusqu'à 50 Mo</div>
+            </div>
+            <div id="student-dropzone-selected" class="dropzone-file-selected" style="display:none;">
+              <div class="selected-file-badge"><i class="ti ti-file-text"></i> PDF</div>
+              <div class="selected-file-details">
+                <div class="selected-file-name" id="student-selected-filename">mon_cours.pdf</div>
+                <div class="selected-file-meta">
+                  <span id="student-selected-filesize">3.1 Mo</span>
+                  <span class="file-status-badge"><i class="ti ti-check"></i> Prêt pour l'envoi</span>
+                </div>
+              </div>
+              <button type="button" class="btn-remove-file" onclick="removeStudentSelectedFile(event)" title="Changer de fichier">
+                <i class="ti ti-x"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Titre du document</label>
+            <input type="text" id="upload-title" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Catégorie</label>
+            <select id="upload-type" class="form-select">
+              <option value="Examen">Examen</option>
+              <option value="TD">TD (Travaux Dirigés)</option>
+              <option value="TP">TP (Travaux Pratiques)</option>
+              <option value="Cours">Cours</option>
+              <option value="Résumé">Résumé</option>
+              <option value="PFE">PFE / Mémoire</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Université</label>
+            <select id="upload-uni" class="form-select">
+              <option value="USTHB (Alger)">USTHB (Alger)</option>
+              <option value="Univ. Badji Mokhtar (Annaba)">Univ. Badji Mokhtar (Annaba)</option>
+              <option value="Univ. Constantine 2">Univ. Constantine 2</option>
+              <option value="Univ. Oran 1">Univ. Oran 1</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Module / Spécialité</label>
+            <input type="text" id="upload-module" class="form-input">
+          </div>
+
+          <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+            <button class="btn btn-outline" onclick="showView('home')">Annuler</button>
+            <button class="btn btn-primary" onclick="submitUpload()">Soumettre le document</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== LOGIN / REGISTER VIEWS =================== -->
+    <div class="view" id="view-login-student">
+      <div class="auth-page-wrapper">
+        <div class="auth-card">
+          <div class="auth-header">
+            <div class="auth-logo-badge">
+              <i class="ti ti-school"></i>
+            </div>
+            <h2 class="auth-title">Connexion</h2>
+            <p class="auth-subtitle">Accédez à votre espace étudiant et à vos documents enregistrés</p>
+          </div>
+
+          <!-- CONTINUE WITH GOOGLE -->
+          <button type="button" class="btn-google-auth" onclick="startGoogleAuth('login')">
+            <svg class="google-icon-svg" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.04h3.88c2.28-2.1 3.66-5.2 3.66-9.14z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.04c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.27 21.36 7.34 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.28c-.24-.72-.38-1.49-.38-2.28s.14-1.56.38-2.28V6.59H1.25C.45 8.18 0 9.97 0 12s.45 3.82 1.25 5.41l4.03-3.13z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.27 2.64 1.25 6.59l4.03 3.13c.95-2.83 3.6-4.93 6.72-4.93z"/>
+            </svg>
+            <span>Continuer avec Google</span>
+          </button>
+
+          <div class="auth-divider">
+            <span>ou avec votre email</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><i class="ti ti-mail"></i> Email universitaire ou personnel</label>
+            <input type="email" id="login-email-student" class="form-input" placeholder="ex: etudiant@univ.dz" onkeydown="if(event.key==='Enter') doLogin()">
+          </div>
+          <div class="form-group">
+            <label class="form-label"><i class="ti ti-lock"></i> Mot de passe</label>
+            <input type="password" id="login-password-student" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+          </div>
+
+          <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 12px;" onclick="doLogin()">
+            <i class="ti ti-login"></i> Se connecter
+          </button>
+
+          <p class="auth-switch-link">
+            Pas encore de compte ? <span onclick="showView('register-student')">S'inscrire gratuitement</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-register-student">
+      <div class="auth-page-wrapper">
+        <div class="auth-card" style="max-width: 480px;">
+          <div class="auth-header">
+            <div class="auth-logo-badge">
+              <i class="ti ti-user-plus"></i>
+            </div>
+            <h2 class="auth-title">Créer un Compte</h2>
+            <p class="auth-subtitle">Rejoignez la communauté universitaire DocStudy Algérie</p>
+          </div>
+
+          <!-- CONTINUE WITH GOOGLE (QUICK REGISTRATION) -->
+          <button type="button" class="btn-google-auth" onclick="startGoogleAuth('register')">
+            <svg class="google-icon-svg" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.04h3.88c2.28-2.1 3.66-5.2 3.66-9.14z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.04c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.27 21.36 7.34 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.28c-.24-.72-.38-1.49-.38-2.28s.14-1.56.38-2.28V6.59H1.25C.45 8.18 0 9.97 0 12s.45 3.82 1.25 5.41l4.03-3.13z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.27 2.64 1.25 6.59l4.03 3.13c.95-2.83 3.6-4.93 6.72-4.93z"/>
+            </svg>
+            <span>Continuer avec Google (Inscription directe)</span>
+          </button>
+
+          <div class="auth-divider">
+            <span>ou inscription par formulaire</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Prénom</label>
+              <input type="text" id="register-firstname" class="form-input" placeholder="Prénom" onkeydown="if(event.key==='Enter') doRegister()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom</label>
+              <input type="text" id="register-lastname" class="form-input" placeholder="Nom" onkeydown="if(event.key==='Enter') doRegister()">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email universitaire ou personnel</label>
+            <input type="email" id="register-email" class="form-input" placeholder="ex: amine@univ-alger.dz" onkeydown="if(event.key==='Enter') doRegister()">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Université</label>
+            <select id="register-uni" class="form-select">
+              <option value="">-- Choisir une université --</option>
+              <option value="USTHB (Alger)">USTHB (Alger)</option>
+              <option value="Univ. Badji Mokhtar (Annaba)">Univ. Badji Mokhtar (Annaba)</option>
+              <option value="Univ. Constantine 2">Univ. Constantine 2</option>
+              <option value="Univ. Oran 1">Univ. Oran 1</option>
+              <option value="ESI (Alger)">ESI (Alger)</option>
+              <option value="Univ. Tlemcen">Univ. Tlemcen</option>
+              <option value="Univ. Béjaïa">Univ. Béjaïa</option>
+              <option value="Univ. Sétif 1">Univ. Sétif 1</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mot de passe (min. 6 caractères)</label>
+            <input type="password" id="register-password" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doRegister()">
+          </div>
+
+          <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 12px;" onclick="doRegister()">
+            <i class="ti ti-check"></i> Créer mon compte
+          </button>
+
+          <p class="auth-switch-link">
+            Déjà un compte ? <span onclick="showView('login-student')">Se connecter</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ADMIN CONTROL PANEL -->
+    <div class="view" id="view-admin">
+      <div class="inner-page">
+        <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h1 class="section-title-scribd" style="margin: 0;"><i class="ti ti-shield-lock"></i> Panneau Admin</h1>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Gérez tous les documents et les comptes étudiants.</p>
+          </div>
+          <button class="btn btn-outline" onclick="doLogout()"><i class="ti ti-logout"></i> Déconnexion</button>
+        </div>
+
+        <!-- TABS -->
+        <div style="display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 24px;">
+          <button class="admin-tab active" id="tab-btn-pending" onclick="switchAdminTab('pending')">Demandes en attente <span id="director-pending-badge" style="font-size: 10px; background: #FEF3C7; color: #D97706; padding: 1px 6px; border-radius: 10px; margin-left: 4px;">0</span></button>
+          <button class="admin-tab" id="tab-btn-docs" onclick="switchAdminTab('docs')">Tous les Documents</button>
+          <button class="admin-tab" id="tab-btn-add" onclick="switchAdminTab('add')">+ Ajouter un Document</button>
+          <button class="admin-tab" id="tab-btn-students" onclick="switchAdminTab('students')">Comptes Étudiants</button>
+        </div>
+
+        <!-- TAB: DEMANDES EN ATTENTE -->
+        <div id="admin-tab-pending">
+          <div id="admin-pending-list"></div>
+        </div>
+
+        <!-- TAB: TOUS LES DOCUMENTS -->
+        <div id="admin-tab-docs" style="display:none;">
+          <div id="admin-all-docs-list"></div>
+        </div>
+
+        <!-- TAB: AJOUTER UN DOCUMENT -->
+        <div id="admin-tab-add" style="display:none;">
+          <div class="card" style="max-width: 680px;">
+            <h3 class="card-title" id="admin-form-title">Ajouter un Document PDF depuis votre PC</h3>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 4px; margin-bottom: 16px;">Sélectionnez un fichier PDF depuis votre ordinateur et renseignez ses informations pour le publier directement dans la bibliothèque.</p>
+            <input type="hidden" id="admin-edit-doc-id">
+
+            <!-- PDF UPLOAD ZONE FOR ADMIN FROM PC -->
+            <input type="file" id="admin-doc-file-input" accept="application/pdf, .pdf" style="display:none;" onchange="handleAdminFileChange(event)">
+            
+            <div class="admin-pdf-dropzone" id="admin-dropzone" onclick="triggerAdminFileInput()" ondragover="handleAdminDragOver(event)" ondragleave="handleAdminDragLeave(event)" ondrop="handleAdminDrop(event)">
+              <div id="admin-dropzone-empty" class="dropzone-content">
+                <div class="dropzone-icon"><i class="ti ti-cloud-upload"></i></div>
+                <div class="dropzone-title">Sélectionner un fichier PDF depuis votre PC</div>
+                <div class="dropzone-subtitle">Glissez et déposez votre document PDF ici, ou cliquez pour parcourir vos dossiers</div>
+                <div class="dropzone-hint"><i class="ti ti-file-text"></i> Fichiers PDF jusqu'à 50 Mo</div>
+              </div>
+              
+              <div id="admin-dropzone-selected" class="dropzone-file-selected" style="display:none;">
+                <div class="selected-file-badge"><i class="ti ti-file-text"></i> PDF</div>
+                <div class="selected-file-details">
+                  <div class="selected-file-name" id="admin-selected-filename">mon_fichier.pdf</div>
+                  <div class="selected-file-meta">
+                    <span id="admin-selected-filesize">2.4 Mo</span>
+                    <span class="file-status-badge"><i class="ti ti-check"></i> Fichier PDF sélectionné</span>
+                  </div>
+                </div>
+                <button type="button" class="btn-remove-file" onclick="removeAdminSelectedFile(event)" title="Changer de fichier">
+                  <i class="ti ti-x"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 16px;">
+              <label class="form-label">Titre du document *</label>
+              <input type="text" id="admin-doc-title" class="form-input" placeholder="Ex: Examen d'Algorithmique L1 - USTHB">
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Catégorie</label>
+                <select id="admin-doc-type" class="form-select">
+                  <option value="Examen">Examen</option>
+                  <option value="TD">TD (Travaux Dirigés)</option>
+                  <option value="TP">TP (Travaux Pratiques)</option>
+                  <option value="Cours">Cours</option>
+                  <option value="Résumé">Résumé</option>
+                  <option value="PFE">PFE / Mémoire</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Université</label>
+                <select id="admin-doc-uni" class="form-select">
+                  <option value="USTHB (Alger)">USTHB (Alger)</option>
+                  <option value="Univ. Badji Mokhtar (Annaba)">Univ. Badji Mokhtar (Annaba)</option>
+                  <option value="Univ. Constantine 2">Univ. Constantine 2</option>
+                  <option value="Univ. Oran 1">Univ. Oran 1</option>
+                  <option value="ESI (Alger)">ESI (Alger)</option>
+                  <option value="Univ. Tlemcen">Univ. Tlemcen</option>
+                  <option value="Univ. Béjaïa">Univ. Béjaïa</option>
+                  <option value="Univ. Sétif 1">Univ. Sétif 1</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Module *</label>
+                <input type="text" id="admin-doc-module" class="form-input" placeholder="Ex: Algorithmique, Génie Logiciel...">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Niveau</label>
+                <select id="admin-doc-year" class="form-select">
+                  <option value="L1">L1</option>
+                  <option value="L2">L2</option>
+                  <option value="L3" selected>L3</option>
+                  <option value="M1">M1</option>
+                  <option value="M2">M2</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Description du document</label>
+              <textarea id="admin-doc-desc" class="form-input" rows="3" style="resize:vertical;" placeholder="Précisez le contenu, les chapitres traités ou les exercices inclus..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 14px;">
+              <button class="btn btn-primary" onclick="adminSaveDoc()"><i class="ti ti-check"></i> Publier le document PDF</button>
+              <button class="btn btn-outline" onclick="adminCancelEdit()">Annuler</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: COMPTES ETUDIANTS -->
+        <div id="admin-tab-students" style="display:none;">
+          <div id="admin-students-management-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENT DASHBOARD -->
+    <div class="view" id="view-dashboard">
+      <div class="inner-page">
+        <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h1 class="section-title-scribd" style="margin: 0;">Mes Documents & Favoris</h1>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Retrouvez vos cours enregistrés et vos contributions personnelles.</p>
+          </div>
+          <button class="btn btn-outline" onclick="goBack()"><i class="ti ti-arrow-left"></i> Retour</button>
+        </div>
+        <div class="card">
+          <div id="dashboard-docs-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USER PROFILE VIEW (MON COMPTE ETUDIANT) -->
+    <div class="view" id="view-profile">
+      <div class="inner-page profile-page-container">
+        
+        <div class="profile-header-bar">
+          <div class="profile-header-left">
+            <div class="profile-badge-tag"><i class="ti ti-school"></i> Espace Étudiant</div>
+            <h1 class="profile-page-title">Mon Compte Étudiant</h1>
+            <p class="profile-page-sub">Gérez votre profil universitaire, votre photo personnelle et vos contributions.</p>
+          </div>
+          <div class="profile-header-actions">
+            <button class="btn btn-outline" onclick="goBack()"><i class="ti ti-arrow-left"></i> Retour</button>
+          </div>
+        </div>
+
+        <div class="profile-grid-layout">
+          
+          <!-- LEFT: AVATAR & STATS CARD -->
+          <div class="profile-sidebar-card">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar-circle" id="profile-avatar-container">
+                <span class="profile-avatar-initials">AM</span>
+              </div>
+              <label for="profile-photo-file-input" class="profile-avatar-upload-btn" title="Changer ma photo de profil">
+                <i class="ti ti-camera"></i>
+              </label>
+              <input type="file" id="profile-photo-file-input" accept="image/png, image/jpeg, image/webp, image/gif" style="display:none;" onchange="handleStudentPhotoUpload(event)">
+            </div>
+
+            <h2 class="profile-card-name" id="profile-full-name">Amin Mahieddine</h2>
+            <div class="profile-card-university" id="profile-meta-desc">Univ. Badji Mokhtar (Annaba)</div>
+            <div class="profile-card-badge"><i class="ti ti-circle-check-filled"></i> Compte Étudiant Vérifié</div>
+
+            <div class="profile-photo-actions">
+              <button type="button" class="btn-profile-photo-change" onclick="document.getElementById('profile-photo-file-input').click()">
+                <i class="ti ti-camera"></i> Mettre ma photo perso
+              </button>
+              <button type="button" class="btn-profile-photo-remove" id="profile-remove-photo-btn" onclick="removeStudentPhoto()" style="display: none;">
+                <i class="ti ti-trash"></i> Retirer la photo
+              </button>
+            </div>
+
+            <div class="profile-stats-card">
+              <div class="profile-stat-item">
+                <span class="profile-stat-val" id="profile-points-count">1 240</span>
+                <span class="profile-stat-lbl"><i class="ti ti-star-filled" style="color: #F59E0B;"></i> Points</span>
+              </div>
+              <div class="profile-stat-sep"></div>
+              <div class="profile-stat-item">
+                <span class="profile-stat-val" id="profile-docs-count">4</span>
+                <span class="profile-stat-lbl"><i class="ti ti-file-text" style="color: var(--primary);"></i> Dépôts</span>
+              </div>
+              <div class="profile-stat-sep"></div>
+              <div class="profile-stat-item">
+                <span class="profile-stat-val" id="profile-favs-count">2</span>
+                <span class="profile-stat-lbl"><i class="ti ti-bookmark" style="color: var(--teal);"></i> Favoris</span>
+              </div>
+            </div>
+
+            <div class="profile-quick-nav">
+              <button class="profile-nav-link" onclick="showView('dashboard')">
+                <i class="ti ti-bookmark"></i>
+                <span>Mes documents enregistrés</span>
+                <i class="ti ti-chevron-right arrow-icon"></i>
+              </button>
+              <button class="profile-nav-link" onclick="showView('upload')">
+                <i class="ti ti-upload"></i>
+                <span>Déposer un document PDF</span>
+                <i class="ti ti-chevron-right arrow-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT: PROFILE DETAILS FORM -->
+          <div class="profile-main-content">
+            <div class="card profile-form-card">
+              <div class="profile-form-header">
+                <div>
+                  <h3 class="card-title" style="margin: 0;">Informations Universitaires</h3>
+                  <p style="font-size: 12.5px; color: var(--muted); margin-top: 4px;">Informations visibles sur vos contributions et mémoires partagés.</p>
+                </div>
+                <div class="profile-auth-type-pill" id="profile-auth-pill">
+                  <i class="ti ti-shield-check"></i> Étudiant Actif
+                </div>
+              </div>
+
+              <div class="profile-form-grid" style="margin-top: 22px;">
+                <div class="form-group">
+                  <label class="form-label"><i class="ti ti-user"></i> Prénom</label>
+                  <input type="text" id="profile-firstname-input" class="form-input" placeholder="Prénom">
+                </div>
+                <div class="form-group">
+                  <label class="form-label"><i class="ti ti-user"></i> Nom</label>
+                  <input type="text" id="profile-lastname-input" class="form-input" placeholder="Nom">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label"><i class="ti ti-mail"></i> Adresse Email Universitaire</label>
+                <input type="email" id="profile-email-input" class="form-input" placeholder="exemple@univ.dz">
+              </div>
+
+              <div class="profile-form-grid">
+                <div class="form-group">
+                  <label class="form-label"><i class="ti ti-building-bank"></i> Université</label>
+                  <select id="profile-uni-select" class="form-select">
+                    <option value="USTHB (Alger)">USTHB (Alger)</option>
+                    <option value="Univ. Badji Mokhtar (Annaba)">Univ. Badji Mokhtar (Annaba)</option>
+                    <option value="Univ. Constantine 2">Univ. Constantine 2</option>
+                    <option value="Univ. Oran 1">Univ. Oran 1</option>
+                    <option value="ESI (Alger)">ESI (Alger)</option>
+                    <option value="Univ. Tlemcen">Univ. Tlemcen</option>
+                    <option value="Univ. Béjaïa">Univ. Béjaïa</option>
+                    <option value="Univ. Sétif 1">Univ. Sétif 1</option>
+                    <option value="Univ. Boumerdès (UMBB)">Univ. Boumerdès (UMBB)</option>
+                    <option value="Univ. Blida 1">Univ. Blida 1</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label"><i class="ti ti-school"></i> Niveau d'études</label>
+                  <select id="profile-year-select" class="form-select">
+                    <option value="L1">Licence 1 (L1)</option>
+                    <option value="L2">Licence 2 (L2)</option>
+                    <option value="L3">Licence 3 (L3)</option>
+                    <option value="M1">Master 1 (M1)</option>
+                    <option value="M2">Master 2 (M2)</option>
+                    <option value="Doctorat">Doctorat</option>
+                    <option value="Ingénieur">Cycle Ingénieur</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label"><i class="ti ti-book"></i> Filière / Spécialité</label>
+                <input type="text" id="profile-specialty-input" class="form-input" placeholder="Ex: Informatique, Systèmes Distribués...">
+              </div>
+
+              <div class="profile-form-actions">
+                <button class="btn btn-primary" onclick="saveProfile()">
+                  <i class="ti ti-check"></i> Enregistrer les modifications
+                </button>
+                <button class="btn btn-outline btn-logout" onclick="doLogout()">
+                  <i class="ti ti-logout"></i> Se déconnecter
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+      </main>
+    </div> <!-- End csl-main -->
+  </div> <!-- End csl-layout -->
+
+  <!-- SCRIBD-STYLE DOCUMENT PREVIEW MODAL -->
+  <div id="previewModal" class="modal-overlay scribd-modal" style="display: none;">
+    <div class="modal-content scribd-viewer-modal">
+      <!-- TOP NAVIGATION BAR -->
+      <div class="scribd-top-header">
+        <div class="scribd-header-left">
+          <div class="logo-scribd" onclick="closePreviewModal()" style="cursor: pointer;" title="Retour à l'accueil">
+            [DOCSTUDY]
+          </div>
+          <div class="scribd-breadcrumb-sep">/</div>
+          <div class="scribd-header-doc-title" id="preview-header-title">Document</div>
+        </div>
+
+        <div class="scribd-header-center">
+          <div class="scribd-search-bar">
+            <i class="ti ti-search"></i>
+            <input type="text" placeholder="Rechercher dans la bibliothèque..." oninput="liveSearch(this.value)" onkeydown="if(event.key==='Enter') { closePreviewModal(); doSearch(); }">
+          </div>
+        </div>
+
+        <div class="scribd-header-right">
+          <button class="btn btn-outline scribd-close-btn" onclick="closePreviewModal()"><i class="ti ti-x"></i> Fermer</button>
+        </div>
+      </div>
+
+      <!-- SCRIBD READER SUB-HEADER / ACTIONS BAR -->
+      <div class="scribd-reader-bar">
+        <div class="scribd-reader-bar-left">
+          <button class="btn-scribd-download" id="preview-download-btn" onclick="triggerDownloadFromPreview()">
+            <i class="ti ti-download"></i>
+            <span>Télécharger</span>
+          </button>
+          <button class="btn-scribd-action" id="preview-fav-btn" onclick="triggerFavFromPreview()" title="Enregistrer">
+            <i class="ti ti-bookmark"></i>
+          </button>
+          <button class="btn-scribd-action" onclick="triggerShareFromPreview()" title="Partager">
+            <i class="ti ti-share"></i>
+          </button>
+          <button class="btn-scribd-action" onclick="triggerPrintFromPreview()" title="Imprimer">
+            <i class="ti ti-printer"></i>
+          </button>
+        </div>
+
+        <div class="scribd-reader-bar-right">
+          <button class="btn-scribd-action" onclick="togglePaperMode()" id="paper-mode-toggle" title="Basculer le mode d'affichage">
+            <i class="ti ti-file-text"></i> <span style="font-size: 11px; margin-left: 4px;">Mode Document</span>
+          </button>
+          <button class="btn-scribd-action" onclick="toggleFullscreen()" title="Plein écran">
+            <i class="ti ti-maximize"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-COLUMN MAIN LAYOUT -->
+      <div class="scribd-main-layout">
+        <!-- COLUMN 1: LEFT SIDEBAR (METADATA & DESCRIPTION) -->
+        <aside class="scribd-left-col">
+          <!-- TOP TAGS / METADATA (NO views, NO downloads, NO rating!) -->
+          <div class="scribd-meta-badges">
+            <span class="scribd-badge-pill" id="preview-doc-type-badge">EXAMEN</span>
+            <span class="scribd-badge-sub" id="preview-pages-badge">18 pages</span>
+            <span class="scribd-badge-sub" id="preview-level-badge">L3</span>
+          </div>
+
+          <!-- DOCUMENT MAIN TITLE -->
+          <h1 class="scribd-title" id="preview-doc-title">Titre du document</h1>
+
+          <!-- PROMINENT DESCRIPTION (as requested!) -->
+          <div class="scribd-desc-box">
+            <div class="scribd-desc-label">Description du document</div>
+            <p class="scribd-description-text" id="preview-doc-description">
+              Description détaillée du document...
+            </p>
+          </div>
+
+          <!-- CONTRIBUTOR & ACADEMIC INFO -->
+          <div class="scribd-academic-card">
+            <div class="scribd-info-row">
+              <i class="ti ti-user-circle"></i>
+              <div>
+                <span class="scribd-info-label">Ajouté par</span>
+                <strong id="preview-contributor" class="scribd-info-val">Amin Mahieddine</strong>
+              </div>
+            </div>
+            <div class="scribd-info-row">
+              <i class="ti ti-calendar"></i>
+              <div>
+                <span class="scribd-info-label">Date de publication</span>
+                <span id="preview-date" class="scribd-info-val">12 Juin 2024</span>
+              </div>
+            </div>
+            <div class="scribd-info-row">
+              <i class="ti ti-building-bank"></i>
+              <div>
+                <span class="scribd-info-label">Établissement</span>
+                <strong id="preview-detail-uni" class="scribd-info-val">USTHB</strong>
+              </div>
+            </div>
+            <div class="scribd-info-row">
+              <i class="ti ti-school"></i>
+              <div>
+                <span class="scribd-info-label">Faculté & Spécialité</span>
+                <span id="preview-detail-spec" class="scribd-info-val">Informatique</span>
+              </div>
+            </div>
+            <div class="scribd-info-row">
+              <i class="ti ti-book-2"></i>
+              <div>
+                <span class="scribd-info-label">Module d'enseignement</span>
+                <strong id="preview-detail-module" class="scribd-info-val">Génie Logiciel</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS GRID (Save, Print, Share, Report) -->
+          <div class="scribd-actions-grid">
+            <button class="scribd-btn-cell" onclick="triggerFavFromPreview()">
+              <i class="ti ti-bookmark"></i>
+              <span>Enregistrer</span>
+            </button>
+            <button class="scribd-btn-cell" onclick="triggerPrintFromPreview()">
+              <i class="ti ti-printer"></i>
+              <span>Imprimer</span>
+            </button>
+            <button class="scribd-btn-cell" onclick="triggerShareFromPreview()">
+              <i class="ti ti-share"></i>
+              <span>Partager</span>
+            </button>
+            <button class="scribd-btn-cell" onclick="triggerReportFromPreview()">
+              <i class="ti ti-flag"></i>
+              <span>Signaler</span>
+            </button>
+          </div>
+
+          <!-- COMMENTS SECTION -->
+          <div class="scribd-comments-block">
+            <div class="scribd-comments-header">
+              <h4>Commentaires (<span id="preview-comments-count">0</span>)</h4>
+            </div>
+            <div class="scribd-comments-list" id="preview-comments-list"></div>
+            <div class="scribd-comment-form">
+              <input type="text" id="new-comment-text" placeholder="Ajouter un commentaire..." onkeydown="if(event.key==='Enter') submitComment()">
+              <button onclick="submitComment()"><i class="ti ti-send"></i></button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- COLUMN 2: CENTER PDF READER VIEW -->
+        <main class="scribd-center-col">
+          <!-- SLIM TOOLBAR STRIP (LEFT OF CANVAS) -->
+          <div class="scribd-vertical-toolbar">
+            <button class="scribd-tool-btn" title="Rechercher dans le document" onclick="toggleDocSearch()"><i class="ti ti-search"></i></button>
+            <button class="scribd-tool-btn" title="Sommaire" onclick="toggleToc()"><i class="ti ti-list"></i></button>
+            <button class="scribd-tool-btn" title="Vignettes de pages" onclick="toggleThumbnails()"><i class="ti ti-layout-grid"></i></button>
+            
+            <div class="scribd-tool-divider"></div>
+
+            <button class="scribd-tool-btn" title="Page précédente" onclick="changeDocPage(-1)"><i class="ti ti-chevron-up"></i></button>
+            <div class="scribd-page-badge">
+              <span id="scribd-current-page">1</span>
+              <small id="scribd-total-pages">/ 18</small>
+            </div>
+            <button class="scribd-tool-btn" title="Page suivante" onclick="changeDocPage(1)"><i class="ti ti-chevron-down"></i></button>
+
+            <div class="scribd-tool-divider"></div>
+
+            <button class="scribd-tool-btn" title="Zoom avant" onclick="zoomDoc(0.1)"><i class="ti ti-zoom-in"></i></button>
+            <button class="scribd-tool-btn" title="Zoom arrière" onclick="zoomDoc(-0.1)"><i class="ti ti-zoom-out"></i></button>
+          </div>
+
+          <!-- DOCUMENT VIEWPORT / CANVAS -->
+          <div class="scribd-viewport" id="scribd-doc-viewport">
+            <!-- SIMULATED PAPERS (Scribd-like realistic typography & academic styling) -->
+            <div class="scribd-paper-sheet" id="scribd-paper-container">
+              <!-- ACADEMIC OFFICIAL HEADER -->
+              <div class="scribd-academic-header">
+                <div class="scribd-official-text">
+                  RÉPUBLIQUE ALGÉRIENNE DÉMOCRATIQUE ET POPULAIRE<br>
+                  MINISTÈRE DE L'ENSEIGNEMENT SUPÉRIEUR ET DE LA RECHERCHE SCIENTIFIQUE
+                </div>
+                <div class="scribd-uni-banner">
+                  <span id="paper-uni-name">UNIVERSITÉ USTHB</span> — <span id="paper-faculty-name">FACULTÉ D'INFORMATIQUE</span>
+                </div>
+                <div class="scribd-paper-academic-meta">
+                  <span>Année Universitaire : <strong id="paper-academic-year">2023/2024</strong></span>
+                  <span>Session : <strong>Normale (Juin)</strong></span>
+                  <span>Durée : <strong>02h00</strong></span>
+                </div>
+              </div>
+
+              <!-- DOCUMENT TITLE IN PAPER -->
+              <div class="scribd-paper-title-area">
+                <h2 id="paper-main-title">EXAMEN FINAL DE GÉNIE LOGICIEL</h2>
+                <div class="scribd-paper-subtitle" id="paper-subtitle">Filière Informatique · Licence 3 (L3) · Tous documents interdits</div>
+              </div>
+
+              <!-- DYNAMIC REALISTIC CONTENT BODY -->
+              <div class="scribd-paper-body" id="scribd-paper-body">
+                <!-- Injected via JavaScript based on document type & module -->
+              </div>
+
+              <!-- PAPER FOOTER -->
+              <div class="scribd-paper-footer">
+                <span>DocStudy © Bibliothèque Universitaire Algérienne</span>
+                <span id="paper-page-footer">Page 1 sur 18</span>
+              </div>
+            </div>
+
+            <!-- RAW PDF IFRAME (Optional view if user switches) -->
+            <div id="scribd-raw-pdf-wrap" style="display: none; width: 100%; height: 100%;">
+              <iframe id="pdf-viewer-iframe" src="/dummy.pdf" width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+          </div>
+        </main>
+
+        <!-- COLUMN 3: RIGHT SIDEBAR ("YOU MIGHT ALSO LIKE" / "DOCUMENTS SIMILAIRES") -->
+        <aside class="scribd-right-col">
+          <div class="scribd-sidebar-header">
+            <h4>Documents similaires</h4>
+          </div>
+          <div class="scribd-similar-list" id="preview-similar-docs">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE AUTH SIMULATION MODAL -->
+  <div id="googleAuthModal" class="google-auth-overlay" style="display: none;" onclick="if(event.target===this) closeGoogleAuthModal()">
+    <div class="google-auth-dialog">
+      <button type="button" onclick="closeGoogleAuthModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; color: #94A3B8; cursor: pointer;">
+        <i class="ti ti-x"></i>
+      </button>
+
+      <div class="google-dialog-header">
+        <svg class="google-icon-svg" style="width: 32px; height: 32px; margin-bottom: 8px;" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.04h3.88c2.28-2.1 3.66-5.2 3.66-9.14z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.04c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.27 21.36 7.34 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.28c-.24-.72-.38-1.49-.38-2.28s.14-1.56.38-2.28V6.59H1.25C.45 8.18 0 9.97 0 12s.45 3.82 1.25 5.41l4.03-3.13z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.27 2.64 1.25 6.59l4.03 3.13c.95-2.83 3.6-4.93 6.72-4.93z"/>
+        </svg>
+        <h3 style="font-size: 19px; font-weight: 700; color: #1E293B; margin-bottom: 4px;">Connexion avec Google</h3>
+        <p style="font-size: 12px; color: #64748B;">Choisissez un compte ou connectez-vous directement à DocStudy</p>
+      </div>
+
+      <!-- Quick 1-click preset student accounts -->
+      <div style="margin-bottom: 18px;">
+        <div class="google-account-card" onclick="loginWithGoogleAccount('Amine', 'Tilbi', 'amine.student.dz@gmail.com', 'USTHB (Alger)')">
+          <div class="google-account-avatar" style="background: linear-gradient(135deg, #4285F4, #34A853);">AT</div>
+          <div class="google-account-info">
+            <div class="google-account-name">Amine Tilbi</div>
+            <div class="google-account-email">amine.student.dz@gmail.com</div>
+          </div>
+          <span class="google-account-badge">1-Clic</span>
+        </div>
+
+        <div class="google-account-card" onclick="loginWithGoogleAccount('Sara', 'Benmoussa', 'sara.benmoussa@usthb.dz', 'USTHB (Alger)')">
+          <div class="google-account-avatar" style="background: linear-gradient(135deg, #EA4335, #FBBC05);">SB</div>
+          <div class="google-account-info">
+            <div class="google-account-name">Sara Benmoussa</div>
+            <div class="google-account-email">sara.benmoussa@usthb.dz</div>
+          </div>
+          <span class="google-account-badge">1-Clic</span>
+        </div>
+      </div>
+
+      <!-- Custom Google Account input accordion/toggle -->
+      <div style="border-top: 1px solid #E2E8F0; padding-top: 16px;">
+        <p style="font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 10px;">Ou utiliser une autre adresse Google :</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="google-custom-firstname" class="form-input" placeholder="Prénom" style="font-size: 12px; padding: 8px 10px;">
+          <input type="text" id="google-custom-lastname" class="form-input" placeholder="Nom" style="font-size: 12px; padding: 8px 10px;">
+        </div>
+        <input type="email" id="google-custom-email" class="form-input" placeholder="votre.nom@gmail.com" style="font-size: 12px; padding: 8px 10px; margin-bottom: 12px;">
+        <button type="button" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; font-size: 13px;" onclick="submitCustomGoogleAuth()">
+          <i class="ti ti-check"></i> Créer / Se connecter avec ce compte
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-top: 14px;">
+        <span style="font-size: 11px; color: #94A3B8;">Pour continuer, Google partage votre nom et adresse email avec DocStudy.</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>

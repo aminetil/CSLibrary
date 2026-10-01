@@ -1,0 +1,332 @@
+// ============ PRISMA CONFIGURATION ============
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ENUMS ============
+
+enum UserRole {
+  STUDENT
+  CONTRIBUTOR
+  ADMIN
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DocumentTypeEnum {
+  EXAM
+  CORRECTION
+  TD
+  TP
+  COURSE
+  SUMMARY
+  EXERCISE
+  PROJECT
+  LICENCE_PROJECT
+  MASTER_THESIS
+  RESEARCH_PAPER
+  OTHER
+}
+
+enum ReportReason {
+  COPYRIGHT
+  WRONG_CONTENT
+  DUPLICATE
+  INAPPROPRIATE
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  CONFIRMED
+  DISMISSED
+}
+
+// ============ ACADEMIC HIERARCHY ============
+// Faculty/Department are intentionally optional — some universities
+// skip straight from University to Specialty, or use "Institute" instead.
+
+model University {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  city        String?
+  logoUrl     String?
+  faculties   Faculty[]
+  specialties Specialty[]
+  createdAt   DateTime     @default(now())
+
+  @@index([slug])
+}
+
+model Faculty {
+  id           String       @id @default(cuid())
+  name         String
+  slug         String
+  universityId String
+  university   University   @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  departments  Department[]
+
+  @@unique([universityId, slug])
+}
+
+model Department {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String
+  facultyId   String
+  faculty     Faculty     @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  specialties Specialty[]
+
+  @@unique([facultyId, slug])
+}
+
+model Specialty {
+  id           String          @id @default(cuid())
+  name         String
+  slug         String
+  universityId String?
+  university   University?     @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department   Department?     @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  levels       AcademicLevel[]
+
+  @@index([universityId])
+  @@index([departmentId])
+}
+
+model AcademicLevel {
+  id          String     @id @default(cuid())
+  name        String     // "L1", "L2", "L3", "M1", "M2"
+  order       Int        // L1=1 ... M2=5
+  specialtyId String
+  specialty   Specialty  @relation(fields: [specialtyId], references: [id], onDelete: Cascade)
+  semesters   Semester[]
+
+  @@unique([specialtyId, name])
+}
+
+model Semester {
+  id      String        @id @default(cuid())
+  name    String        // "S1", "S2"...
+  levelId String
+  level   AcademicLevel @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  modules Module[]
+
+  @@unique([levelId, name])
+}
+
+model Module {
+  id         String     @id @default(cuid())
+  name       String
+  slug       String
+  semesterId String
+  semester   Semester   @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  documents  Document[]
+
+  @@unique([semesterId, slug])
+}
+
+// ============ USERS ============
+
+model User {
+  id                  String     @id @default(cuid())
+  email               String     @unique
+  emailVerified       DateTime?
+  passwordHash        String?    // null if OAuth-only
+  username            String     @unique
+  avatarUrl           String?
+  role                UserRole   @default(STUDENT)
+  universityId        String?
+  specialtyId         String?
+  levelId             String?
+  contributionPoints  Int        @default(0)
+  isSuspended         Boolean    @default(false)
+  createdAt           DateTime   @default(now())
+
+  documents     Document[]
+  downloads     Download[]
+  favorites     Favorite[]
+  ratings       Rating[]
+  comments      Comment[]
+  reports       Report[]
+  contributions Contribution[]
+  badges        UserBadge[]
+  notifications Notification[]
+  adminActions  AdminAction[]
+
+  @@index([email])
+  @@index([username])
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  name        String      @unique  // "First Contribution", "Top Contributor"...
+  description String
+  iconUrl     String?
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+model Contribution {
+  id        String   @id @default(cuid())
+  userId    String
+  points    Int
+  reason    String   // "document_approved", "report_confirmed", etc.
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ============ DOCUMENTS ============
+
+model Document {
+  id              String           @id @default(cuid())
+  title           String
+  slug            String           @unique
+  description     String?
+  type            DocumentTypeEnum
+  academicYear    String?          // "2024-2025"
+  status          DocumentStatus   @default(PENDING)
+
+  // Denormalized for fast filtering
+  universityId    String
+  levelId         String
+
+  moduleId        String
+  module          Module           @relation(fields: [moduleId], references: [id], onDelete: Restrict)
+
+  uploaderId      String
+  uploader        User             @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+
+  fileKey         String           // R2 object key
+  fileHash        String           @unique  // SHA-256 duplicate detection
+  fileSizeBytes   Int
+  mimeType        String
+
+  downloadCount   Int              @default(0)
+  viewCount       Int              @default(0)
+
+  rejectionReason String?
+  moderatedById   String?
+  moderatedAt     DateTime?
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  downloads Download[]
+  favorites Favorite[]
+  ratings   Rating[]
+  comments  Comment[]
+  reports   Report[]
+
+  @@index([moduleId, type, academicYear])
+  @@index([universityId, levelId])
+  @@index([status])
+  @@index([fileHash])
+}
+
+model Download {
+  id         String   @id @default(cuid())
+  documentId String
+  userId     String?  // Nullable for guest downloads
+  createdAt  DateTime @default(now())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([documentId])
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  documentId String
+  userId     String
+  createdAt  DateTime @default(now())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, documentId])
+}
+
+model Rating {
+  id         String   @id @default(cuid())
+  documentId String
+  userId     String
+  value      Int      // 1-5
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, documentId])
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  documentId String
+  userId     String
+  content    String
+  createdAt  DateTime @default(now())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+}
+
+model Report {
+  id         String       @id @default(cuid())
+  documentId String
+  userId     String
+  reason     ReportReason
+  details    String?
+  status     ReportStatus @default(OPEN)
+  createdAt  DateTime     @default(now())
+  document   Document     @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@index([status])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+}
+
+model AdminAction {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String   // "approve_document", "suspend_user", etc.
+  targetType String   // "Document", "User"
+  targetId   String
+  createdAt  DateTime @default(now())
+  admin      User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([targetType, targetId])
+}
